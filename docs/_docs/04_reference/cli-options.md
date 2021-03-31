@@ -31,27 +31,28 @@ Terragrunt supports the following CLI commands:
   - [destroy-all (DEPRECATED: use run-all)](#destroy-all-deprecated-use-run-all)
   - [validate-all (DEPRECATED: use run-all)](#validate-all-deprecated-use-run-all)
   - [terragrunt-info](#terragrunt-info)
+  - [validate-inputs](#validate-inputs)
   - [graph-dependencies](#graph-dependencies)
   - [hclfmt](#hclfmt)
   - [aws-provider-patch](#aws-provider-patch)
 
 ### All Terraform built-in commands
 
-Terragrunt is a thin wrapper for Terraform, so except for a few of the special commands defined in these docs, 
-Terragrunt forwards all other commands to Terraform. For example, when you run `terragrunt apply`, Terragrunt executes 
+Terragrunt is a thin wrapper for Terraform, so except for a few of the special commands defined in these docs,
+Terragrunt forwards all other commands to Terraform. For example, when you run `terragrunt apply`, Terragrunt executes
 `terraform apply`.
 
 Examples:
 
 ```bash
-terragrunt plan 
-terragrunt apply 
+terragrunt plan
+terragrunt apply
 terragrunt output
 terragrunt destroy
-# etc 
+# etc
 ```
 
-Run `terraform --help` to get the full list. 
+Run `terraform --help` to get the full list.
 
 
 ### run-all
@@ -90,25 +91,25 @@ information](https://github.com/gruntwork-io/terragrunt/issues/720#issuecomment-
 
 **DEPRECATED: Use `run-all plan` instead.**
 
-Display the plans of a 'stack' by running 'terragrunt plan' in each subfolder. Make sure to read [Execute Terraform 
-commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for 
+Display the plans of a 'stack' by running 'terragrunt plan' in each subfolder. Make sure to read [Execute Terraform
+commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for
 context.
 
 Example:
 
 ```bash
 terragrunt plan-all
-``` 
+```
 
 This will recursively search the current working directory for any folders that contain Terragrunt modules and run
-`plan` in each one, concurrently, while respecting ordering defined via 
+`plan` in each one, concurrently, while respecting ordering defined via
 [`dependency`](/docs/reference/config-blocks-and-attributes/#dependency) and
-[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks. 
+[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks.
 
-**[WARNING] `plan-all` is currently broken for certain use cases**. If you have a stack of Terragrunt modules with 
-dependencies between them—either via `dependency` blocks or `terraform_remote_state` data sources—and you've never 
-deployed them, then `plan-all` will fail as it will not be possible to resolve the `dependency` blocks or 
-`terraform_remote_state` data sources! Please [see here for more 
+**[WARNING] `plan-all` is currently broken for certain use cases**. If you have a stack of Terragrunt modules with
+dependencies between them—either via `dependency` blocks or `terraform_remote_state` data sources—and you've never
+deployed them, then `plan-all` will fail as it will not be possible to resolve the `dependency` blocks or
+`terraform_remote_state` data sources! Please [see here for more
 information](https://github.com/gruntwork-io/terragrunt/issues/720#issuecomment-497888756).
 
 
@@ -116,83 +117,83 @@ information](https://github.com/gruntwork-io/terragrunt/issues/720#issuecomment-
 
 **DEPRECATED: Use `run-all apply` instead.**
 
-Apply a 'stack' by running 'terragrunt apply' in each subfolder. Make sure to read [Execute Terraform 
-commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for 
+Apply a 'stack' by running 'terragrunt apply' in each subfolder. Make sure to read [Execute Terraform
+commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for
 context.
 
 Example:
 
 ```bash
 terragrunt apply-all
-``` 
+```
 
 This will recursively search the current working directory for any folders that contain Terragrunt modules and run
-`apply` in each one, concurrently, while respecting ordering defined via 
+`apply` in each one, concurrently, while respecting ordering defined via
 [`dependency`](/docs/reference/config-blocks-and-attributes/#dependency) and
-[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks. 
+[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks.
 
 ### output-all (DEPRECATED: use run-all)
 
 **DEPRECATED: Use `run-all output` instead.**
 
-Display the outputs of a 'stack' by running 'terragrunt output' in each subfolder. Make sure to read [Execute Terraform 
-commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for 
+Display the outputs of a 'stack' by running 'terragrunt output' in each subfolder. Make sure to read [Execute Terraform
+commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for
 context.
 
 Example:
 
 ```bash
 terragrunt output-all
-``` 
+```
 
 This will recursively search the current working directory for any folders that contain Terragrunt modules and run
-`output` in each one, concurrently, while respecting ordering defined via 
+`output` in each one, concurrently, while respecting ordering defined via
 [`dependency`](/docs/reference/config-blocks-and-attributes/#dependency) and
-[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks. 
+[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks.
 
-**[WARNING] `output-all` is currently broken for certain use cases**. If you have a stack of Terragrunt modules with 
-dependencies between them—either via `dependency` blocks or `terraform_remote_state` data sources—and you've never 
-deployed them, then `output-all` will fail as it will not be possible to resolve the `dependency` blocks or 
-`terraform_remote_state` data sources! Please [see here for more 
+**[WARNING] `output-all` is currently broken for certain use cases**. If you have a stack of Terragrunt modules with
+dependencies between them—either via `dependency` blocks or `terraform_remote_state` data sources—and you've never
+deployed them, then `output-all` will fail as it will not be possible to resolve the `dependency` blocks or
+`terraform_remote_state` data sources! Please [see here for more
 information](https://github.com/gruntwork-io/terragrunt/issues/720#issuecomment-497888756).
 
 ### destroy-all (DEPRECATED: use run-all)
 
 **DEPRECATED: Use `run-all destroy` instead.**
 
-Destroy a 'stack' by running 'terragrunt destroy' in each subfolder. Make sure to read [Execute Terraform 
-commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for 
+Destroy a 'stack' by running 'terragrunt destroy' in each subfolder. Make sure to read [Execute Terraform
+commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for
 context.
 
 Example:
 
 ```bash
 terragrunt destroy-all
-``` 
+```
 
 This will recursively search the current working directory for any folders that contain Terragrunt modules and run
-`destroy` in each one, concurrently, while respecting ordering defined via 
+`destroy` in each one, concurrently, while respecting ordering defined via
 [`dependency`](/docs/reference/config-blocks-and-attributes/#dependency) and
-[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks. 
+[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks.
 
 ### validate-all (DEPRECATED: use run-all)
 
 **DEPRECATED: Use `run-all validate` instead.**
 
-Validate 'stack' by running 'terragrunt validate' in each subfolder. Make sure to read [Execute Terraform 
-commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for 
+Validate 'stack' by running 'terragrunt validate' in each subfolder. Make sure to read [Execute Terraform
+commands on multiple modules at once](/docs/features/execute-terraform-commands-on-multiple-modules-at-once/) for
 context.
 
 Example:
 
 ```bash
 terragrunt validate-all
-``` 
+```
 
 This will recursively search the current working directory for any folders that contain Terragrunt modules and run
-`validate` in each one, concurrently, while respecting ordering defined via 
+`validate` in each one, concurrently, while respecting ordering defined via
 [`dependency`](/docs/reference/config-blocks-and-attributes/#dependency) and
-[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks. 
+[`dependencies`](/docs/reference/config-blocks-and-attributes/#dependencies) blocks.
 
 ### terragrunt-info
 
@@ -216,6 +217,51 @@ Might produce output such as:
   "WorkingDir": "/example/path"
 }
 ```
+
+### validate-inputs
+
+Emits information about the input variables that are configured with the given
+terragrunt configuration. Specifically, this command will print out unused
+inputs (inputs that are not defined as a terraform variable in the
+corresponding module) and undefined required inputs (required terraform
+variables that are not currently being passed in).
+
+Example:
+
+```bash
+> terragrunt validate-inputs
+The following inputs passed in by terragrunt are unused:
+
+    - foo
+    - bar
+
+
+The following required inputs are missing:
+
+    - baz
+
+```
+
+Note that this only checks for variables passed in in the following ways:
+
+- Configured `inputs` attribute.
+
+- var files defined on `terraform.extra_arguments` blocks using `required_var_files` and `optional_var_files`.
+
+- `-var-file` and `-var` CLI arguments defined on `terraform.extra_arguments` using `arguments`.
+
+- `-var-file` and `-var` CLI arguments passed to terragrunt.
+
+- Automatically loaded var files (`terraform.tfvars`, `terraform.tfvars.json`, `*.auto.tfvars`, `*.auto.tfvars.json`)
+
+- `TF_VAR` environment variables defined on `terraform.extra_arguments` blocks.
+
+- `TF_VAR` environment variables defined in the environment.
+
+Be aware that other ways to pass variables to `terraform` are not checked by this command.
+
+This command will exit with an error if terragrunt detects any unused inputs or undefined required inputs.
+
 
 ### graph-dependencies
 
@@ -276,15 +322,15 @@ This will recursively search the current working directory for any folders that 
 
 ### aws-provider-patch
 
-Overwrite settings on nested AWS providers to work around several Terraform bugs. Due to 
+Overwrite settings on nested AWS providers to work around several Terraform bugs. Due to
 [issue #13018](https://github.com/hashicorp/terraform/issues/13018) and
 [issue #26211](https://github.com/hashicorp/terraform/issues/26211), the `import` command may fail if your Terraform
-code uses a module that has a `provider` block nested within it that sets any of its attributes to computed values. 
-This command is a hacky attempt at working around this problem by allowing you to temporarily hard-code those 
-attributes so `import` can work. 
+code uses a module that has a `provider` block nested within it that sets any of its attributes to computed values.
+This command is a hacky attempt at working around this problem by allowing you to temporarily hard-code those
+attributes so `import` can work.
 
-You specify which attributes to hard-code using the [`--terragrunt-override-attr`](#terragrunt-override-attr) option, 
-passing it `ATTR=VALUE`, where `ATTR` is the attribute name and `VALUE` is the new value. Note that `ATTR` can specify 
+You specify which attributes to hard-code using the [`--terragrunt-override-attr`](#terragrunt-override-attr) option,
+passing it `ATTR=VALUE`, where `ATTR` is the attribute name and `VALUE` is the new value. Note that `ATTR` can specify
 attributes within a nested block by specifying `<BLOCK>.<ATTR>`, where `<BLOCK>` is the block name. For example, let's
 say you had a `provider` block in a module that looked like this:
 
@@ -298,18 +344,18 @@ provider "aws" {
 ```
 
 Both the `region` and `role_arn` parameters are set to dynamic values, which will trigger those Terraform bugs. To work
-around it, run the following command: 
+around it, run the following command:
 
 ```bash
 terragrunt aws-provider-patch \
   --terragrunt-override-attr region=eu-west-1 \
   --terragrunt-override-attr assume_role.role_arn=""
-```  
+```
 
 When you run the command above, Terragrunt will:
 
 1. Run `terraform init` to download the code for all your modules into `.terraform/modules`.
-1. Scan all the Terraform code in `.terraform/modules`, find AWS `provider` blocks, and for each one, hard-code: 
+1. Scan all the Terraform code in `.terraform/modules`, find AWS `provider` blocks, and for each one, hard-code:
     1. The `region` param to `"eu-west-1"`.
     1. The `role_arn` within the `assume_role` block to `""`.
 
@@ -324,15 +370,15 @@ provider "aws" {
 }
 ```
 
-This should allow you to run `import` on the module and work around those Terraform bugs. When you're done running 
-`import`, remember to delete your overridden code! E.g., Delete the `.terraform` or `.terragrunt-cache` folders.   
+This should allow you to run `import` on the module and work around those Terraform bugs. When you're done running
+`import`, remember to delete your overridden code! E.g., Delete the `.terraform` or `.terragrunt-cache` folders.
 
 
 
 
 ## CLI options
 
-Terragrunt forwards all options to Terraform. The only exceptions are `--version` and arguments that start with the 
+Terragrunt forwards all options to Terraform. The only exceptions are `--version` and arguments that start with the
 prefix `--terragrunt-` (e.g., `--terragrunt-config`). The currently available options are:
 
 - [terragrunt-config](#terragrunt-config)
@@ -407,9 +453,15 @@ When passed in, don't automatically retry commands which fail with transient err
 **CLI Arg**: `--terragrunt-non-interactive`<br/>
 **Environment Variable**: `TF_INPUT` (set to `false`)
 
-When passed in, don't show interactive user prompts. This will default the answer for all prompts to 'yes'. Useful if
-you need to run Terragrunt in an automated setting (e.g. from a script). May also be specified with the
-[TF\_INPUT](https://www.terraform.io/docs/configuration/environment-variables.html#tf_input) environment variable.
+When passed in, don't show interactive user prompts. This will default the answer for all prompts to `yes` except for
+the listed cases below. This is useful if you need to run Terragrunt in an automated setting (e.g. from a script). May
+also be specified with the [TF\_INPUT](https://www.terraform.io/docs/configuration/environment-variables.html#tf_input)
+environment variable.
+
+This setting will default to `no` for the following cases:
+
+- Prompts related to pulling in external dependencies. You can force include external dependencies using the
+  [--terragrunt-include-external-dependencies](#terragrunt-include-external-dependencies) option.
 
 
 ### terragrunt-working-dir
@@ -590,7 +642,7 @@ When passed in, run `hclfmt` only on specified `*/terragrunt.hcl` file.
 **CLI Arg**: `--terragrunt-override-attr`
 **Requires an argument**: `--terragrunt-override-attr ATTR=VALUE`
 
-Override the attribute named `ATTR` with the value `VALUE` in a `provider` block as part of the [aws-provider-patch 
+Override the attribute named `ATTR` with the value `VALUE` in a `provider` block as part of the [aws-provider-patch
 command](#aws-provider-patch). May be specified multiple times. Also, `ATTR` can specify attributes within a nested
 block by specifying `<BLOCK>.<ATTR>`, where `<BLOCK>` is the block name: e.g., `assume_role.role` arn will override the
 `role_arn` attribute of the `assume_role { ... }` block.

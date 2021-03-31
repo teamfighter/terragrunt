@@ -52,6 +52,8 @@ Terragrunt allows you to use built-in functions anywhere in `terragrunt.hcl`, ju
 
   - [sops\_decrypt\_file()](#sops_decrypt_file)
 
+  - [get\_terragrunt\_source\_cli\_flag()](#get_terragrunt_source_cli_flag)
+
 ## Terraform built-in functions
 
 All [Terraform built-in functions](https://www.terraform.io/docs/configuration/functions.html) are supported in Terragrunt config files:
@@ -113,6 +115,25 @@ include {
   path = find_in_parent_folders("some-other-file-name.hcl", "fallback.hcl")
 }
 ```
+
+Note that this function searches relative to the child `terragrunt.hcl` file when called from a parent config. For
+example, if you had the following folder structure:
+
+    ├── terragrunt.hcl
+    └── prod
+        ├── env.hcl
+        └── mysql
+            └── terragrunt.hcl
+
+And the root `terragrunt.hcl` contained the following:
+
+    locals {
+      env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+    }
+
+The `find_in_parent_folders` will search from the __child `terragrunt.hcl`__ (`prod/mysql/terragrunt.hcl`) config,
+finding the `env.hcl` file in the `prod` directory.
+
 
 ## path\_relative\_to\_include
 
@@ -610,3 +631,15 @@ inputs = merge(
   }
 )
 ```
+
+## get\_terragrunt\_source\_cli\_flag
+
+`get_terragrunt_source_cli_flag()` returns the value passed in via the CLI `--terragrunt-source` or an environment variable `TERRAGRUNT_SOURCE`. Note that this will return an empty string when either of those values are not provided.
+
+This is useful for constructing before and after hooks, or TF flags that only apply to local development (e.g., setting up debug flags, or adjusting the `iam_role` parameter).
+
+Some example use cases are:
+
+- Setting debug logging when doing local development.
+- Adjusting the kubernetes provider configuration so that it targets minikube instead of real clusters.
+- Providing special mocks pulled in from the local dev source (e.g., something like `mock_outputs = jsondecode(file("${get_terragrunt_source_cli_arg()}/dependency_mocks/vpc.json"))`).
