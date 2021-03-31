@@ -58,6 +58,9 @@ The `terraform` block supports the following arguments:
     - `commands` (required) : A list of `terraform` sub commands for which the hook should run before.
     - `execute` (required) : A list of command and arguments that should be run as the hook. For example, if `execute` is set as
       `["echo", "Foo"]`, the command `echo Foo` will be run.
+    - `working_dir` (optional) : The path to set as the working directory of the hook. Terragrunt will switch directory
+      to this path prior to running the hook command. Defaults to the terragrunt configuration directory for
+      `terragrunt-read-config` and `init-from-module` hooks, and the terraform module directory for other command hooks.
     - `run_on_error` (optional) : If set to true, this hook will run even if a previous hook hit an error, or in the
       case of "after" hooks, if the Terraform command hit an error. Default is false.
 
@@ -248,6 +251,7 @@ For the `s3` backend, the following additional properties are supported in the `
   such as the CRC32 check for DynamoDB. This can be used to workaround
   https://github.com/gruntwork-io/terragrunt/issues/1059.
 - `accesslogging_bucket_name`: (Optional) When provided as a valid `string`, create an S3 bucket with this name to store the access logs for the S3 bucket used to store Terraform state. If not provided, or string is empty or invalid S3 bucket name, then server access logging for the S3 bucket storing the terraform state will be disabled.
+- `accesslogging_target_prefix`: (Optional) When provided as a valid `string`, set the `TargetPrefix` for the access log objects in the S3 bucket used to store Terraform state. If set to **empty**`string`, then `TargetPrefix` will be set to **empty** `string`. If attribute is not provided at all, then `TargetPrefix` will be set to **default** value `TFStateLogs/`. This attribute won't take effect if the `accesslogging_bucket_name` attribute is not present.
 
 For the `gcs` backend, the following additional properties are supported in the `config` attribute:
 
